@@ -67,7 +67,9 @@ def transcript_to_pdf(lines, output_path="transcript.pdf"):
     with open(output_path, "wb") as output_file:
         output_file.write(pdf_buffer.getvalue())
 
-
+@app.route('/')
+def home():
+    return "Welcome to the YouTube Transcript and PDF Generator API!"
 # Endpoints
 @app.route('/generate_pdf', methods=['GET'])
 def generate_pdf():
@@ -112,7 +114,6 @@ def query_pdf():
         pdf_retrieval_chain = create_retrieval_chain(pdf_retriever, document_chain)
         # Get response from LLM
         response = pdf_retrieval_chain.invoke({"input": query})
-        print(type(response['context'][0].page_content))
         return jsonify({"response": response['context'][0].page_content}), 200
 
     except Exception as e:
@@ -121,4 +122,3 @@ def query_pdf():
 
 if __name__ == '__main__':
     app.run()
-
